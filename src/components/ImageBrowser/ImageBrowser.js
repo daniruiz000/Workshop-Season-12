@@ -31,8 +31,12 @@ const ImageBrowser = () => {
 
     const addFavorite = (newPhoto) => {
 
-        const newList = [...favoriteList, newPhoto]
-        setFavoriteList(newList)
+        const coincidence = favoriteList.filter(photo => photo.id === newPhoto.id)
+
+        if (!coincidence[0]) {
+            const newList = [...favoriteList, newPhoto]
+            setFavoriteList(newList)
+        }
     }
 
     const deleteFavorite = (newPhoto) => {
@@ -42,33 +46,24 @@ const ImageBrowser = () => {
     }
 
     return (
-        <div className="app" >
-            <div>
+        <div className="image-browser" >
+            <div className="image-browser__controls">
                 <input ref={inputRef} type='text' placeholder='  Introduce el texto para buscar imagenes'></input>
                 <button onClick={() => callAPI(inputRef.current.value)}>Buscar imagenes</button>
                 <button>Cambiar Tema</button>
-
             </div>
 
             {imgList[0] ?
-                <div>
+                <div className="image-browser__photo-list">
                     <h3>Listado de fotos:</h3>
-                    {imgList.map(photo => {
-                        return (
-                            <Photo key = {photo.id} photo= {photo} handleClick = {addFavorite}/>
-                        )
-                    })}
+                    {imgList.map(photo => <Photo key={photo.id} photo={photo} handleClick={addFavorite} />)}
                 </div>
                 : <p>Introduce tu imagen ...</p>}
 
             {favoriteList[0] ?
-                <div>
+                <div className="image-browser__favorite-list">
                     <h3>Favoritos:</h3>
-                    {favoriteList.map(photo => {
-                        return (
-                            <Photo key = {photo.id} photo= {photo} handleClick = {deleteFavorite}/>
-                        )
-                    })}
+                    {favoriteList.map(photo => <Photo key={photo.id} photo={photo} handleClick={deleteFavorite} />)}
                 </div>
                 : <p> No hay favoritos...</p>}
 
