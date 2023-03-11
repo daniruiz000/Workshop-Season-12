@@ -7,14 +7,14 @@ export const ThemeContext = React.createContext();
 
 const themes = {
   colorfull: {
-      name: "colorfull",
-      background: "linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c)",
-      fontColor: "white",
+    name: "colorfull",
+    background: "linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c)",
+    fontColor: "white",
   },
   normal: {
-      name: "normal",
-      background: "#FFFF",
-      fontColor: "black",
+    name: "normal",
+    background: "#FFFF",
+    fontColor: "black",
   }
 }
 
@@ -25,7 +25,7 @@ function App() {
   return (
     <div className="app">
       <ThemeContext.Provider value={themeState}>
-      <button className="app__button" onClick={()=> setThemeState(themeState === themes.normal ? themes.colorfull : themes.normal)}>Cambiar Tema</button>
+        <button className="app__button" onClick={() => setThemeState(themeState === themes.normal ? themes.colorfull : themes.normal)}>Cambiar Tema</button>
         <ImageBrowser />
       </ThemeContext.Provider>
     </div>

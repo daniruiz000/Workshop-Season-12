@@ -101,15 +101,15 @@ const ImageBrowser = () => {
     const orderListMemo = React.useMemo(() => orderList(imgList), [imgList]);
 
 
-    const addFavorite = (newPhoto) => {
+    const addFavorite = React.useCallback((newPhoto) => {
         const payload = newPhoto
         dispatch({ type: 'ADD_FAVORITE', payload })
-    }
+    }, [])
 
-    const deleteFavorite = (newPhoto) => {
+    const deleteFavorite = React.useCallback((newPhoto) => {
         const payload = newPhoto
         dispatch({ type: 'DELETE_FAVORITE', payload })
-    }
+    },[])
 
     return (
 
