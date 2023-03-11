@@ -1,0 +1,57 @@
+.image-browser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0;
+    width: 800px;
+}
+
+.image-browser__controls {
+    display: flex;
+    margin: 50px 0;
+}
+.image-browser__controls input {
+    margin: 10px;
+    font-size: 15px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.image-browser__controls button {
+    margin: 10px;
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: rgb(174, 168, 168);
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+}
+
+.image-browser__photo-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 50px 0;
+    width: 800px;
+}
+
+.image-browser__favorite-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 50px 0;
+    width: 800px;
+}
+
+.photo {
+    max-width: 150px;
+    margin: 5px;
+}
+.photo img {
+    width: 100%;
+}
