@@ -2,6 +2,8 @@ import './ImageBrowser.css'
 import React from 'react'
 import Photo from '../Photo/Photo';
 
+//elementos del use reducer
+
 const initialArg = {listFavorite:[]};
 
 const reducer = (state, action)=>{
@@ -31,7 +33,7 @@ const reducer = (state, action)=>{
     return newState
 }
 
-
+//Componente
 
 const ImageBrowser = () => {
 
