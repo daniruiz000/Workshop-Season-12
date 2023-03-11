@@ -6,6 +6,11 @@
     margin: 50px 0;
     width: 800px;
 }
+.image-browser h3 {
+    font-size: 40px;
+    font-weight: 700;
+    text-shadow:  2px 2px 2px  black;
+}
 
 .image-browser__controls {
     display: flex;
@@ -36,7 +41,8 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 50px 0;
-    width: 800px;
+    padding: 20px;
+    width: 100%;
 }
 
 .image-browser__favorite-list {
@@ -50,8 +56,15 @@
 
 .photo {
     max-width: 150px;
-    margin: 5px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px grey;
+    text-align: center;
+    padding: 10px;
+    background-color: rgb(158, 158, 182);
 }
 .photo img {
-    width: 100%;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
 }

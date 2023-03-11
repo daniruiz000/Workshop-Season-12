@@ -1,31 +1,34 @@
 import './ImageBrowser.css'
 import React from 'react'
 import Photo from '../Photo/Photo';
+import { ThemeContext } from '../../App';
 
-//elementos del use reducer
 
-const initialArg = {listFavorite:[]};
 
-const reducer = (state, action)=>{
+//elementos del useReducer
 
-    const newState = {...state}
+const initialArg = { listFavorite: [] };
+
+const reducer = (state, action) => {
+
+    const newState = { ...state }
 
     switch (action.type) {
 
         case 'ADD_FAVORITE':
-            
-        const coincidence = state.listFavorite.filter(photo => photo.id === action.payload.id)
 
-        if (!coincidence[0]) {
-            newState.listFavorite = [...newState.listFavorite, action.payload]
-        }
+            const coincidence = state.listFavorite.filter(photo => photo.id === action.payload.id)
+
+            if (!coincidence[0]) {
+                newState.listFavorite = [...newState.listFavorite, action.payload]
+            }
             break;
 
         case 'DELETE_FAVORITE':
-            
-        newState.listFavorite =  newState.listFavorite.filter(photo => photo.id !== action.payload.id)
-  
-        break;
+
+            newState.listFavorite = newState.listFavorite.filter(photo => photo.id !== action.payload.id)
+
+            break;
 
         default:
             break;
@@ -43,12 +46,15 @@ const ImageBrowser = () => {
     const inputRef = React.useRef(null)
 
     const [imgList, setImgList] = React.useState([])
-    const [favoriteList, setFavoriteList] = React.useState([])
-    const[error, setError] = React.useState(false)
+    const [error, setError] = React.useState(false)
 
-    const [favList, dispatch] = React.useReducer(reducer, initialArg);
+ 
+    const theme = React.useContext(ThemeContext);
 
-    const callAPI = (text) => {
+    const [favListReducer, dispatch] = React.useReducer(reducer, initialArg);
+
+    const callAPI = (event) => {
+        event.preventDefault()
 
         const options = {
             headers: {
@@ -56,61 +62,64 @@ const ImageBrowser = () => {
             }
         };
 
-        const finalUrl = `${API_URL}${text}`;
+        const finalUrl = `${API_URL}${inputRef.current.value}`;
 
         fetch(finalUrl, options)
             .then(response => response.json())
             .then(data => {
-                if(data.photos[0]){
-                setImgList(data.photos)
-                }else{
+                if (data.photos[0]) {
+                    setImgList(data.photos)
+                    setError(false)
+                } else {
                     setError(true)
                 }
             });
     }
 
     const addFavorite = (newPhoto) => {
-
-        const coincidence = favoriteList.filter(photo => photo.id === newPhoto.id)
-
-        if (!coincidence[0]) {
-            const newList = [...favoriteList, newPhoto]
-            setFavoriteList(newList)
-        }
+        const payload = newPhoto
+        dispatch({ type: 'ADD_FAVORITE', payload })
     }
 
     const deleteFavorite = (newPhoto) => {
-
-        const newList = favoriteList.filter(photo => photo.id !== newPhoto.id)
-        setFavoriteList(newList)
+        const payload = newPhoto
+        dispatch({ type: 'DELETE_FAVORITE', payload })
     }
 
     return (
-        <div className="image-browser" >
 
-            <div className="image-browser__controls">
-                <input ref={inputRef} type='text' placeholder='  Introduce el texto para buscar imagenes'></input>
-                <button onClick={() => callAPI(inputRef.current.value)}>Buscar imagenes</button>
-                <button>Cambiar Tema</button>
-            </div>
+            <div className="image-browser " style={{ background: theme.background, color: theme.fontColor }}>
+
+                <form onSubmit={(event) => callAPI(event)} className="image-browser__controls">
+                    <input ref={inputRef} type='text' placeholder='  Introduce el texto para buscar imagenes'></input>
+                    <button type='submit'>Buscar imagenes</button>
+                   
+                </form>
+
+                {error ?
+                    <p>No hay imagenes para la busqueda</p>
+                    : imgList[0] ?
+                        <>
+                            <h3>Resultados de la busqueda:</h3>
+                            <div className="image-browser__photo-list">
+                                {imgList.map(photo => <Photo key={photo.id} photo={photo} handleClick={addFavorite} />)}
+                            </div>
+                        </>
+                        : <p>Introduce tu busqueda ...</p>}
+
+
+                {favListReducer.listFavorite[0] ? <>
+                    <h3>Favoritos:</h3>
+                    <div className="image-browser__favorite-list">
+                        {favListReducer.listFavorite.map(photo => <Photo key={photo.id} photo={photo} handleClick={deleteFavorite} />)}
+                    </div>
+                </>
+                    : <p> No hay favoritos seleccionados...</p>}
+
             
-            {imgList[0] ? <>
-                <h3>Resultados de la busqueda:</h3>
-                <div className="image-browser__photo-list">
-                    {imgList.map(photo => <Photo key={photo.id} photo={photo} handleClick={addFavorite} />)}
-                </div>
-            </>
-                : <p>Introduce tu imagen ...</p>}
 
-            {favoriteList[0] ?<>
-                <h3>Favoritos:</h3>
-                <div className="image-browser__favorite-list">
-                    {favoriteList.map(photo => <Photo key={photo.id} photo={photo} handleClick={deleteFavorite} />)}
-                </div>
-            </>
-                : <p> No hay favoritos seleccionados...</p>}
-
-        </div>
+            </div>
+      
     )
 }
 export default ImageBrowser;
