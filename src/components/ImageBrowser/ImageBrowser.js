@@ -7,7 +7,12 @@ import { ThemeContext } from '../../App';
 
 //elementos del useReducer
 
-const initialArg = { listFavorite: [] };
+let initialArg = { listFavorite: [] };
+
+const backupstate = window.localStorage.getItem('STATE')
+if (backupstate !== null ){
+    initialArg = JSON.parse(backupstate) 
+} 
 
 const reducer = (state, action) => {
 
@@ -33,6 +38,7 @@ const reducer = (state, action) => {
         default:
             break;
     }
+    window.localStorage.setItem('STATE', JSON.stringify(newState))
     return newState
 }
 
@@ -47,7 +53,7 @@ const ImageBrowser = () => {
 
     const [imgList, setImgList] = React.useState([])
     const [error, setError] = React.useState(false)
-
+    
  
     const theme = React.useContext(ThemeContext);
 
@@ -70,11 +76,30 @@ const ImageBrowser = () => {
                 if (data.photos[0]) {
                     setImgList(data.photos)
                     setError(false)
+                    
                 } else {
                     setError(true)
                 }
             });
     }
+
+    const orderList = (list)=>{
+        const newList = list.sort((a,b) => {
+            if (a.alt > b.alt) {
+                return 1;
+              }
+              if (a.alt < b.alt) {
+                return -1;
+              }
+     
+              return 0;
+
+        })
+        return newList
+    }
+
+    const orderListMemo = React.useMemo(() => orderList(imgList), [imgList]);
+
 
     const addFavorite = (newPhoto) => {
         const payload = newPhoto
@@ -102,7 +127,7 @@ const ImageBrowser = () => {
                         <>
                             <h3>Resultados de la busqueda:</h3>
                             <div className="image-browser__photo-list">
-                                {imgList.map(photo => <Photo key={photo.id} photo={photo} handleClick={addFavorite} />)}
+                                {orderListMemo.map(photo => <Photo key={photo.id} photo={photo} handleClick={addFavorite} />)}
                             </div>
                         </>
                         : <p>Introduce tu busqueda ...</p>}
