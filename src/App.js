@@ -25,7 +25,9 @@ function App() {
   return (
     <div className="app">
       <ThemeContext.Provider value={themeState}>
-        <button className="app__button" onClick={() => setThemeState(themeState === themes.normal ? themes.colorfull : themes.normal)}>Cambiar Tema</button>
+        <header>
+          <button className="app__button" onClick={() => setThemeState(themeState === themes.normal ? themes.colorfull : themes.normal)}>Cambiar Tema</button>
+        </header>
         <ImageBrowser />
       </ThemeContext.Provider>
     </div>
